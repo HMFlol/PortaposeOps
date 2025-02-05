@@ -6,7 +6,7 @@ services:
     image: registry.gitlab.com/crafty-controller/crafty-4:latest
     restart: always
     environment:
-      - TZ=Ast/UTC
+      - TZ=America/Halifax
     ports:
       - "8443:8443" # HTTPS
       - "8123:8123" # DYNMAP
