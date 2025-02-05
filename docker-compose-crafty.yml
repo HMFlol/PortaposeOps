@@ -6,15 +6,47 @@ services:
     image: registry.gitlab.com/crafty-controller/crafty-4:latest
     restart: always
     environment:
-        - TZ=Ast/UTC
+      - TZ=Ast/UTC
     ports:
-        - "8443:8443" # HTTPS
-        - "8123:8123" # DYNMAP
-        - "19132:19132/udp" # BEDROCK
-        - "25500-25600:25500-25600" # MC SERV PORT RANGE
+      - "8443:8443" # HTTPS
+      - "8123:8123" # DYNMAP
+      - "19132:19132/udp" # BEDROCK
+      - "25500-25600:25500-25600" # MC SERV PORT RANGE
     volumes:
-        - /docker/crafty-4/backups:/crafty/backups
-        - /docker/crafty-4/logs:/crafty/logs
-        - /docker/crafty-4/servers:/crafty/servers
-        - /docker/crafty-4/config:/crafty/app/config
-        - /docker/crafty-4/import:/crafty/import
+      - crafty_backups:/crafty/backups
+      - crafty_logs:/crafty/logs
+      - crafty_servers:/crafty/servers
+      - crafty_config:/crafty/app/config
+      - crafty_import:/crafty/import
+
+volumes:
+  crafty_backups:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /docker/crafty-4/backups
+  crafty_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /docker/crafty-4/logs
+  crafty_servers:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /docker/crafty-4/servers
+  crafty_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /docker/crafty-4/config
+  crafty_import:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /docker/crafty-4/import
