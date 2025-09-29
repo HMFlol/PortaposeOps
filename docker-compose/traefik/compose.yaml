@@ -20,9 +20,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      - /docker/traefik/traefik.yml:/traefik.yaml:ro
+      - /docker/traefik/traefik.yaml:/traefik.yaml:ro
       - /docker/traefik/acme.json:/acme.json
-      - /docker/traefik/config.yml:/config.yaml:ro
+      - /docker/traefik/config.yaml:/config.yaml:ro
       - /docker/traefik/logs:/var/log/traefik
 
     labels:
