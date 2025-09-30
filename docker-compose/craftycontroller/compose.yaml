@@ -31,9 +31,7 @@ services:
       - "traefik.http.routers.crafty_container-secure.service=crafty_container"
       - "traefik.http.services.crafty_container.loadbalancer.server.port=8443"
       - "traefik.docker.network=proxy"
-      - "traefik.http.services.crafty_container.loadbalancer.server.scheme=https"
-      - "traefik.http.services.crafty_container.loadbalancer.serversTransport=crafty-transport"
-      - "traefik.http.serversTransports.crafty-transport.insecureSkipVerify=true"
+      - "traefik.http.services.crafty_container.loadbalancer.serversTransport=skip"
 
 volumes:
   crafty_backups:
