@@ -2,7 +2,7 @@ version: '3'
 
 services:
   crafty:
-    container_name: crafty_container
+    container_name: crafty
     image: registry.gitlab.com/crafty-controller/crafty-4:latest
     restart: unless-stopped
     environment:
@@ -22,16 +22,14 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.crafty_container.entrypoints=http"
-      - "traefik.http.routers.crafty_container.rule=Host(`crafty.rynewood.ca`)"
-      - "traefik.http.middlewares.crafty_container-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.crafty_container-secure.entrypoints=https"
-      - "traefik.http.routers.crafty_container-secure.rule=Host(`crafty.rynewood.ca`)"
-      - "traefik.http.routers.crafty_container-secure.tls=true"
-      - "traefik.http.routers.crafty_container-secure.service=crafty_container"
-      - "traefik.http.services.crafty_container.loadbalancer.server.port=8443"
+      - "traefik.http.routers.crafty.rule=Host(`crafty.rynewood.ca`)"
+      - "traefik.http.routers.crafty.entrypoints=https"
+      - "traefik.http.routers.crafty.tls=true"
+      - "traefik.http.routers.crafty.tls.certresolver=cloudflare"
+      - "traefik.http.services.crafty.loadbalancer.server.port=8443"
+      - "traefik.http.services.crafty.loadbalancer.server.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.docker.network=proxy"
-      - "traefik.http.services.crafty_container.loadbalancer.serversTransport=skip"
 
 volumes:
   crafty_backups:
