@@ -2,8 +2,6 @@ services:
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
-    ports:
-      - "3000:8080"
     volumes:
       - open-webui:/app/backend/data
     extra_hosts:
@@ -11,7 +9,6 @@ services:
     restart: always
     networks:
       - proxy
-
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.open-webui.entrypoints=http"
@@ -21,10 +18,8 @@ services:
       - "traefik.http.routers.open-webui-secure.rule=Host(`chat.rynewood.ca`)"
       - "traefik.http.routers.open-webui-secure.tls=true"
       - "traefik.http.routers.open-webui-secure.service=open-webui"
-      #- "traefik.http.services.nginx.loadbalancer.server.port=8080"
+      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
       - "traefik.docker.network=proxy"
-
-      
 
   pipelines:
     image: ghcr.io/open-webui/pipelines:main
