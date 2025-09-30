@@ -28,7 +28,7 @@ services:
       - "traefik.http.routers.crafty_container-secure.entrypoints=https"
       - "traefik.http.routers.crafty_container-secure.rule=Host(`crafty.rynewood.ca`)"
       - "traefik.http.routers.crafty_container-secure.tls=true"
-      - "traefik.http.routers.crafty_container-secure.service=crafter_container"
+      - "traefik.http.routers.crafty_container-secure.service=crafty_container"
       - "traefik.http.services.crafty_container.loadbalancer.server.port=8443"
       - "traefik.docker.network=proxy"
 
