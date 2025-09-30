@@ -9,7 +9,23 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: always
-  
+    networks:
+      - proxy
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.open-webui.entrypoints=http"
+      - "traefik.http.routers.open-webui.rule=Host(`chat.rynewood.ca`)"
+      - "traefik.http.middlewares.open-webui-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.open-webui-secure.entrypoints=https"
+      - "traefik.http.routers.open-webui-secure.rule=Host(`chat.rynewood.ca`)"
+      - "traefik.http.routers.open-webui-secure.tls=true"
+      - "traefik.http.routers.open-webui-secure.service=open-webui"
+      - "traefik.http.services.nginx.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy"
+
+      
+
   pipelines:
     image: ghcr.io/open-webui/pipelines:main
     container_name: pipelines
@@ -20,7 +36,13 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: always
+    networks:
+      - proxy
 
 volumes:
   open-webui:
   pipelines:
+
+networks:
+  proxy:
+    external: true
