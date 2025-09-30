@@ -21,7 +21,7 @@ services:
       - "traefik.http.routers.open-webui-secure.rule=Host(`chat.rynewood.ca`)"
       - "traefik.http.routers.open-webui-secure.tls=true"
       - "traefik.http.routers.open-webui-secure.service=open-webui"
-      - "traefik.http.services.nginx.loadbalancer.server.port=3000"
+      - "traefik.http.services.nginx.loadbalancer.server.port=8080"
       - "traefik.docker.network=proxy"
 
       
