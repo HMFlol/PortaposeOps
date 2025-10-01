@@ -11,14 +11,11 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.open-webui.entrypoints=http"
-      - "traefik.http.routers.open-webui.rule=Host(`chat.rynewood.ca`)"
-      - "traefik.http.middlewares.open-webui-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.open-webui-secure.entrypoints=https"
-      - "traefik.http.routers.open-webui-secure.rule=Host(`chat.rynewood.ca`)"
-      - "traefik.http.routers.open-webui-secure.tls=true"
-      - "traefik.http.routers.open-webui-secure.service=open-webui"
-      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
+      - "traefik.http.routers.openwebui.rule=Host(`chat.rynewood.ca`)"
+      - "traefik.http.routers.openwebui.entrypoints=https"
+      - "traefik.http.routers.openwebui.tls=true"
+      - "traefik.http.routers.openwebui.tls.certresolver=cloudflare"
+      - "traefik.http.services.openwebui.loadbalancer.server.port=8080"
       - "traefik.docker.network=proxy"
 
   pipelines:
