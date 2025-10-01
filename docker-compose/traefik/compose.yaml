@@ -27,20 +27,23 @@ services:
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.entrypoints=http"
-      - "traefik.http.routers.api.rule=Host(`traefik.rynewood.ca`)"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDS}"
-      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      # HTTP router: redirect all HTTP to HTTPS
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.rynewood.ca`)"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      # HTTPS router: secure dashboard
       - "traefik.http.routers.traefik-secure.entrypoints=https"
       - "traefik.http.routers.traefik-secure.rule=Host(`traefik.rynewood.ca`)"
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main=rynewood.ca"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.rynewood.ca"
       - "traefik.http.routers.traefik-secure.service=api@internal"
+      # Basic authentication for dashboard
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDS}"
+      # X-Forwrded-Proto header for websockets and security
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      
 
 networks:
   proxy:
