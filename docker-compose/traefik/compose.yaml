@@ -44,6 +44,9 @@ services:
       # X-Forwrded-Proto header for websockets and security
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=rynewood.ca"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.rynewood.ca"
+      
 
 networks:
   proxy:
