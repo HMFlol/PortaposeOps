@@ -29,7 +29,6 @@ services:
       - "traefik.http.services.crafty.loadbalancer.server.port=8443"
       - "traefik.http.services.crafty.loadbalancer.server.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.docker.network=proxy"
 
 volumes:
   crafty_backups:
