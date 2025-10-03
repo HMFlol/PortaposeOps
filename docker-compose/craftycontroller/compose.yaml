@@ -27,7 +27,7 @@ services:
       - "traefik.http.routers.crafty.tls=true"
       - "traefik.http.routers.crafty.tls.certresolver=cloudflare"
       - "traefik.http.services.crafty.loadbalancer.server.port=8443"
-      #- "traefik.http.services.crafty.loadbalancer.server.scheme=https"
+      - "traefik.http.services.crafty.loadbalancer.server.scheme=https"
       #- "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
 
 volumes:
