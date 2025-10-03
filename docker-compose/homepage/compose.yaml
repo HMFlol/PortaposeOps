@@ -23,6 +23,7 @@ services:
       - "traefik.http.routers.homepage.tls=true"
       - "traefik.http.routers.homepage.tls.certresolver=cloudflare"
       - "traefik.http.services.homepage.loadbalancer.server.port=3001"
+      - "traefik.http.services.homepage.loadbalancer.server.scheme=https"
 
   dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
