@@ -18,12 +18,12 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.openwebui.rule=Host(`homepage.rynewood.ca`)"
-      - "traefik.http.routers.openwebui.entrypoints=https"
-      - "traefik.http.routers.openwebui.tls=true"
-      - "traefik.http.routers.openwebui.tls.certresolver=cloudflare"
-      - "traefik.http.services.openwebui.loadbalancer.server.port=3001"
-    
+      - "traefik.http.routers.homepage.rule=Host(`homepage.rynewood.ca`)"
+      - "traefik.http.routers.homepage.entrypoints=https"
+      - "traefik.http.routers.homepage.tls=true"
+      - "traefik.http.routers.homepage.tls.certresolver=cloudflare"
+      - "traefik.http.services.homepage.loadbalancer.server.port=3001"
+
   dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     container_name: dockerproxy
