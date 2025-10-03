@@ -14,6 +14,15 @@ services:
       - /docker/homepage/config:/app/config # Make sure your local config directory exists
       - /var/run/docker.sock:/var/run/docker.sock:ro # optional, for docker integrations
     restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.openwebui.rule=Host(`homepage.rynewood.ca`)"
+      - "traefik.http.routers.openwebui.entrypoints=https"
+      - "traefik.http.routers.openwebui.tls=true"
+      - "traefik.http.routers.openwebui.tls.certresolver=cloudflare"
+      - "traefik.http.services.openwebui.loadbalancer.server.port=3001"
     
   dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
@@ -28,3 +37,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted as read-only
     restart: unless-stopped
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
