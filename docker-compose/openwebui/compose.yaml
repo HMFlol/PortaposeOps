@@ -16,7 +16,6 @@ services:
       - "traefik.http.routers.openwebui.tls=true"
       - "traefik.http.routers.openwebui.tls.certresolver=cloudflare"
       - "traefik.http.services.openwebui.loadbalancer.server.port=8080"
-      - "traefik.docker.network=proxy"
 
   pipelines:
     image: ghcr.io/open-webui/pipelines:main
