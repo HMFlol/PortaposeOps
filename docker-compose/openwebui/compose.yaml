@@ -16,7 +16,6 @@ services:
       - "traefik.http.routers.openwebui.tls=true"
       - "traefik.http.routers.openwebui.tls.certresolver=cloudflare"
       - "traefik.http.services.openwebui.loadbalancer.server.port=8080"
-      - "traefik.http.routers.openwebui.middlewares=default-security-headers@file"
 
   pipelines:
     image: ghcr.io/open-webui/pipelines:main
@@ -30,7 +29,7 @@ services:
     restart: always
     networks:
       - proxy
-
+  
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: litellm
@@ -64,6 +63,9 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    restart: always
+    networks:
+      - proxy
 
 volumes:
   open-webui:
