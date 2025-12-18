@@ -4,6 +4,9 @@ services:
     container_name: open-webui
     volumes:
       - open-webui:/app/backend/data
+    environment:
+      - OPENAI_API_BASE_URL=http://litellm:4000
+      - OPENAI_API_KEY=${LITELLM_MASTER_KEY}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: always
@@ -16,6 +19,8 @@ services:
       - "traefik.http.routers.openwebui.tls=true"
       - "traefik.http.routers.openwebui.tls.certresolver=cloudflare"
       - "traefik.http.services.openwebui.loadbalancer.server.port=8080"
+    depends_on:
+      - litellm
 
   pipelines:
     image: ghcr.io/open-webui/pipelines:main
@@ -29,7 +34,7 @@ services:
     restart: always
     networks:
       - proxy
-  
+
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: litellm
@@ -40,11 +45,12 @@ services:
     command: ["--port", "4000", "--detailed_debug"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    restart: always
+    restart: on-failure:5
     networks:
       - proxy
     depends_on:
-      - litellm-db
+      litellm-db:
+        condition: service_healthy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.litellm.rule=Host(`llm.rynewood.ca`)"
@@ -62,6 +68,14 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - proxy
 
 volumes:
   open-webui:
