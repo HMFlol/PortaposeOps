@@ -29,10 +29,44 @@ services:
     restart: always
     networks:
       - proxy
+  
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: litellm
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@litellm-db:5432/${POSTGRES_DB}
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - STORE_MODEL_IN_DB=True
+    command: ["--port", "4000", "--detailed_debug"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+    networks:
+      - proxy
+    depends_on:
+      - litellm-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.litellm.rule=Host(`llm.rynewood.ca`)"
+      - "traefik.http.routers.litellm.entrypoints=https"
+      - "traefik.http.routers.litellm.tls=true"
+      - "traefik.http.routers.litellm.tls.certresolver=cloudflare"
+      - "traefik.http.services.litellm.loadbalancer.server.port=4000"
+
+  litellm-db:
+    image: postgres:15-alpine
+    container_name: litellm-db
+    volumes:
+      - litellm-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
 
 volumes:
   open-webui:
   pipelines:
+  litellm-db-data:
 
 networks:
   proxy:
